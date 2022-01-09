@@ -20,7 +20,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run() {
     try {
       await client.connect();
-      console.log("database connected successfully")
+      console.log("database connected success")
 
       const database = client.db('winter_clothes');
       const productsCollection = database.collection('products');
@@ -37,6 +37,17 @@ async function run() {
             const result = await productsCollection.find({}).toArray();
             res.send(result);
         });
+
+        // single Product
+        app.get("/singleProduct/:id", async (req, res) => {
+          
+          const result = await productsCollection
+          .find({ _id: ObjectId(req.params.id) })
+          .toArray();
+          res.send(result[0]);
+           console.log(result);
+      });
+
     } finally {
     //   await client.close();
     }
